@@ -4,6 +4,8 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 dotenv.config();
 
+import { authRouter } from './routes/auth.routes';
+
 // create app
 const app: Express = express();
 const port = process.env.PORT || 5000;
@@ -12,6 +14,9 @@ const port = process.env.PORT || 5000;
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors({}));
+
+// configure routes
+app.use('/auth', authRouter);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Digirecruit Backend');
