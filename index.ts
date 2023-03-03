@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { authRouter } from './routes/auth.routes';
+import { candRouter } from './routes/candidate.routes';
 
 // create app
 const app: Express = express();
@@ -17,6 +18,7 @@ app.use(cors({}));
 
 // configure routes
 app.use('/auth', authRouter);
+app.use('/candidate', candRouter);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Digirecruit Backend');
