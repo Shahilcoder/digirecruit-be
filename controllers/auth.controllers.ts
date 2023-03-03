@@ -6,7 +6,7 @@ dotenv.config();
 
 const signup = async (req: Request, res: Response) => {
     try {
-        const { username, password } = req.body;
+        const { username, password, profile } = req.body;
         const users = db.collection('users');
 
         const snapshot = await users.where('username', '==', username).get();
@@ -16,7 +16,7 @@ const signup = async (req: Request, res: Response) => {
 
             const passwordHash = await bcrypt.hash(password, <number>parseInt(<string>process.env.SALT));
 
-            await docRef.set({ username, password: passwordHash });
+            await docRef.set({ username, password: passwordHash, profile });
 
             res.status(201).json({ "message": "User created successfully" });
         } else {
@@ -42,7 +42,7 @@ const login = async (req: Request, res: Response) => {
             const result = await bcrypt.compare(password, data.password);
 
             if (result) {
-                res.status(200).json({ "message": "Login successful" });
+                res.status(200).json({ "message": "Login successful", profile: data.profile });
             } else {
                 res.status(401).json({ "message": "Incorrect Password" });
             }
@@ -52,4 +52,4 @@ const login = async (req: Request, res: Response) => {
     }
 };
 
-export { signup };
+export { signup, login };
