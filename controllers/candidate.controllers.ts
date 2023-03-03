@@ -110,7 +110,7 @@ const registerCandDetails = async (req: Request, res: Response) => {
             await cands.doc(snapshot.docs[0].id).set(data);
         }
 
-        // remove the uploads dir
+        // remove the uploads dir recursively
         fs.rmSync('uploads', { recursive: true, force: true });
         // create empty uploads dir
         fs.mkdir('uploads', () => { });
