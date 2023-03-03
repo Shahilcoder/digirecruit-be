@@ -27,21 +27,29 @@ const signup = async (req: Request, res: Response) => {
     }
 };
 
-// const login = async (req: Request, res: Response) => {
-//     try {
-//         const { username, password } = req.body;
-//         const users = db.collection('users');
+const login = async (req: Request, res: Response) => {
+    try {
+        const { username, password } = req.body;
+        const users = db.collection('users');
 
-//         const snapshot = await users.where('username', '==', username).get();
+        const snapshot = await users.where('username', '==', username).get();
 
-//         if (snapshot.empty) {
-//             res.status(404).json({ "message": "User does not exist" });
-//         } else {
-//             const doc
-//         }
-//     } catch (error) {
-//         res.status(500).json({ "error": error });
-//     }
-// };
+        if (snapshot.empty) {
+            res.status(404).json({ "message": "User does not exist" });
+        } else {
+            const data = snapshot.docs[0].data();
+
+            const result = await bcrypt.compare(password, data.password);
+
+            if (result) {
+                res.status(200).json({ "message": "Login successful" });
+            } else {
+                res.status(401).json({ "message": "Incorrect Password" });
+            }
+        }
+    } catch (error) {
+        res.status(500).json({ "error": error });
+    }
+};
 
 export { signup };
